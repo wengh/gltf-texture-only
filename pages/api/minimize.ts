@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         minimizeGltf(document)
         const result = await io.writeBinary(document)
         const outputSize = result.length
-        console.log(inputSize, outputSize, document)
+        console.log(inputSize, outputSize, url)
         res.setHeader('Content-Type', 'model/gltf-binary')
         res.writeHead(200)
         res.end(result.buffer, 'binary')
