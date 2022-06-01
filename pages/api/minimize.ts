@@ -1,11 +1,34 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Accessor, Document, ExtensibleProperty, WebIO } from '@gltf-transform/core'
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions'
+import Cors from 'cors'
 
 const io = new WebIO().registerExtensions(KHRONOS_EXTENSIONS)
 
+export const config = {
+    api: {
+        responseLimit: false,
+    },
+}
+
+const cors = Cors({
+    methods: ['GET', 'HEAD'],
+})
+
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+    return new Promise((resolve, reject) => {
+        fn(req, res, (result) => {
+            if (result instanceof Error) {
+                return reject(result)
+            }
+            return resolve(result)
+        })
+    })
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
+        await runMiddleware(req, res, cors)
         const { url } = req.query
         const glb = await downloadBytes(url as string)
         const inputSize = glb.length
