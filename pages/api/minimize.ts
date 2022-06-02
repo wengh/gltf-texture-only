@@ -59,6 +59,7 @@ function minimizeGltf(doc: Document) {
     clear(doc.getRoot().listScenes())
     clear(doc.getRoot().listBuffers())
     clear(doc.getRoot().listAccessors())
+    clear(doc.getRoot().listCameras())
 
     const buffer = doc.createBuffer()
 
